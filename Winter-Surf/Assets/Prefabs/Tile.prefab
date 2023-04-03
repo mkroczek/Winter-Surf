@@ -40,8 +40,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2159306516915937208}
-  - component: {fileID: 2292579750952040420}
-  - component: {fileID: 4027866667006006184}
+  - component: {fileID: 5474455769466081294}
+  - component: {fileID: 5497290592207076761}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -66,7 +66,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2292579750952040420
+--- !u!65 &5474455769466081294
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -79,7 +79,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4027866667006006184
+--- !u!114 &5497290592207076761
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

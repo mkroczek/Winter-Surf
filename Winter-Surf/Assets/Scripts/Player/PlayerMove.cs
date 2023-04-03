@@ -9,6 +9,10 @@ public class PlayerMove : MonoBehaviour
     private float moveSpeed = 3;
     private float sideSpeed = 2;
 
+    public float getMoveSpeed(){
+        return moveSpeed;
+    }
+
     void Awake()
     {
         levelBoundary = levelControl.GetComponent<LevelBoundary>();

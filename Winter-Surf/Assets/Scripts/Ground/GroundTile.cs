@@ -1,20 +1,31 @@
+using System;
 using UnityEngine;
+using System.Collections;
 
 public class GroundTile : MonoBehaviour {
     GroundSpawner groundSpawner;
+    PlayerMove playerMove;
+    // public static GroundTile Instance;
 
-    // Start is called before the first frame update
+    // void Awake() {
+    //     if (Instance == null) {
+    //         Instance = this;
+    //     } else {
+    //         Destroy(gameObject);
+    //     }
+    // }
+
+     // Start is called before the first frame update
     void Start() {
-       groundSpawner =  GameObject.FindObjectOfType<GroundSpawner>();
+        playerMove = GameObject.FindObjectOfType<PlayerMove>();
+        groundSpawner = GameObject.FindObjectOfType<GroundSpawner>();
+        StartCoroutine(SpawnTileWithDelay(2));
     }
 
-    void OnTriggerExit(Collider other){
-        groundSpawner.SpawnTile();
-        Destroy(gameObject, 2);
-    }
-
-    // Update is called once per frame
-    void Update() {
-        
+    IEnumerator SpawnTileWithDelay(float delay) {
+        while (true) {
+            yield return new WaitForSeconds(delay);
+            groundSpawner.SpawnTile();
+        }
     }
 }
