@@ -5,17 +5,13 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     [SerializeField] GameObject levelControl;
-    private LevelBoundary levelBoundary;
+    [SerializeField] int lane = 0;
+    private float laneDistance = 1.5F;
     private float moveSpeed = 3;
-    private float sideSpeed = 2;
+    private float sideSpeed = 7;
 
     public float getMoveSpeed(){
         return moveSpeed;
-    }
-
-    void Awake()
-    {
-        levelBoundary = levelControl.GetComponent<LevelBoundary>();
     }
 
     // Update is called once per frame
@@ -23,29 +19,31 @@ public class PlayerMove : MonoBehaviour
     {
         transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed, Space.World);
 
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            moveLeft();
+            MoveLeft();
         }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
-            moveRight();
+            MoveRight();
+        }
+
+        transform.position = Vector3.MoveTowards(transform.position, new Vector3(laneDistance * lane, transform.position.y, transform.position.z), Time.deltaTime * sideSpeed);
+    }
+
+    private void MoveLeft()
+    {
+        if (lane > -1)
+        {
+            lane --;
         }
     }
 
-    private void moveLeft()
+    private void MoveRight()
     {
-        if (this.gameObject.transform.position.x > levelBoundary.getLeftBoundary())
+        if (lane < 1)
         {
-            transform.Translate(Vector3.left * Time.deltaTime * sideSpeed);
-        }
-    }
-
-    private void moveRight()
-    {
-        if (this.gameObject.transform.position.x < levelBoundary.getRightBoundary())
-        {
-            transform.Translate(Vector3.right * Time.deltaTime * sideSpeed);
+            lane ++;
         }
     }
 }
