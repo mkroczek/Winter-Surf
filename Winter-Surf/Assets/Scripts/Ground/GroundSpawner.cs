@@ -9,13 +9,24 @@ public class GroundSpawner : MonoBehaviour {
 
 
     public void SpawnTile(){
+        int obstaclePosition = Random.Range(-1,2);
+        int snowflakePosition = Random.Range(-1,2);
+        while ( snowflakePosition == obstaclePosition ) 
+        {
+            snowflakePosition = Random.Range(-1,2);
+        }
+        
+        // tile placement
         GameObject obj = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
         nextSpawnPoint = obj.transform.GetChild(1).transform.position;
 
-        Instantiate(pineObstacle, obj.transform.position, Quaternion.identity);
+        // obstacle placement
+        Vector3 obstacleVect = new Vector3(obj.transform.position.x + obstaclePosition, obj.transform.position.y, obj.transform.position.z);
+        Instantiate(pineObstacle, obstacleVect, Quaternion.identity);
 
-        Vector3 snowflakePosition = new Vector3(obj.transform.position.x + 1, obj.transform.position.y, obj.transform.position.z);
-        Instantiate(snowflakeCollectable, snowflakePosition, Quaternion.identity);
+        // snowflake placement
+        Vector3 snowflakeVect = new Vector3(obj.transform.position.x + snowflakePosition, obj.transform.position.y + 0.5f, obj.transform.position.z);
+        Instantiate(snowflakeCollectable, snowflakeVect, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
     }
 
     // Start is called before the first frame update
