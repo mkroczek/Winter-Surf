@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33000012041727206}
   - component: {fileID: 23000014169819574}
   - component: {fileID: 64000012281273944}
+  - component: {fileID: -5929601606293226628}
   m_Layer: 0
   m_Name: Pine_NoSnow3
   m_TagString: Obstacle
@@ -99,3 +100,15 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: e6ec39770b6dbe04f9cbd7ea19e0c7ef, type: 3}
+--- !u!114 &-5929601606293226628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013472076366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee60af7f3cb132b4cafaf560441d090f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

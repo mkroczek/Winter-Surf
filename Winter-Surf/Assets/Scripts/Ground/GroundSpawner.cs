@@ -9,11 +9,11 @@ public class GroundSpawner : MonoBehaviour {
 
 
     public void SpawnTile(){
-        int obstaclePosition = Random.Range(-1,2);
-        int snowflakePosition = Random.Range(-1,2);
+        float obstaclePosition = Random.Range(-1,2) * 1.5f;
+        float snowflakePosition = Random.Range(-1,2) * 1.5f;
         while ( snowflakePosition == obstaclePosition ) 
         {
-            snowflakePosition = Random.Range(-1,2);
+            snowflakePosition = Random.Range(-1,2) * 1.5f;
         }
         
         // tile placement
