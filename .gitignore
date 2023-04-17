@@ -58,3 +58,7 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# User Settings and user files
+Winter-Surf/UserSettings/Layouts/default-2021.dwlt
+Winter-Surf/.vsconfig
+
