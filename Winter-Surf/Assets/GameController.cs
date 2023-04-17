@@ -4,17 +4,14 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {   
-    public GameObject terrain;
-    // Start is called before the first frame update
-    void Start()
-    {
-        // GameObject newTerrain = Instantiate(terrain);
-        // newTerrain.transform.position = new Vector3(0, -1, 150);
-    }
+    // public GameObject terrain;
 
-    // Update is called once per frame
-    void Update()
+    public static GameObject LEVELCONTROL;
+    // public GameObject PLAYERINSTANCE;
+    // public GameObject PLAYERCHILDINSTANCE;
+
+    void Awake()
     {
-        
+        LEVELCONTROL = gameObject;
     }
 }

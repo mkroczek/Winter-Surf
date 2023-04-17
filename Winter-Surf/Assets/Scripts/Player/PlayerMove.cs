@@ -10,6 +10,16 @@ public class PlayerMove : MonoBehaviour
     public float moveSpeed = 3;
     private float sideSpeed = 7;
 
+    // TODO: jeśli możliwe przenieść te deklaracje do GameController
+    public static GameObject PLAYERINSTANCE;
+    public static GameObject PLAYERCHILDINSTANCE;
+
+    void Awake()
+    {
+        PLAYERINSTANCE = gameObject;
+        PLAYERCHILDINSTANCE = transform.GetChild(1).gameObject;
+    }
+
     public float getMoveSpeed(){
         return moveSpeed;
     }
