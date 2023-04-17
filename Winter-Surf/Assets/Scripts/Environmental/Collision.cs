@@ -6,6 +6,7 @@ public class Collision : MonoBehaviour
 {   
     public GameObject thePlayer;
     public GameObject playerChild;
+    public GameObject mainCamera;
 
     void OnTriggerEnter(Collider e) {
 
@@ -13,6 +14,7 @@ public class Collision : MonoBehaviour
         thePlayer.GetComponent<PlayerMove>().enabled = false;
         // Animator playerAnimator = playerChild.GetComponent<Animator>();
         playerChild.GetComponent<Animator>().Play("Stumble Backwards");
+        mainCamera.GetComponent<Animator>().enabled = true;
         print("COLLISION");
 
 
