@@ -691,6 +691,7 @@ GameObject:
   - component: {fileID: 348746558}
   - component: {fileID: 348746559}
   - component: {fileID: 348746560}
+  - component: {fileID: 348746561}
   m_Layer: 0
   m_Name: LevelControl
   m_TagString: Untagged
@@ -739,7 +740,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d94b002031a54e4281e6a89a7ada568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrain: {fileID: 0}
+--- !u!114 &348746561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348746556}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406d8539daad9fc49943af2f3c46022d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endScreen: {fileID: 907810619}
 --- !u!1 &506817070
 GameObject:
   m_ObjectHideFlags: 0
