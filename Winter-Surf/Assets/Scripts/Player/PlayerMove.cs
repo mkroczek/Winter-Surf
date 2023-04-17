@@ -7,7 +7,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] GameObject levelControl;
     [SerializeField] int lane = 0;
     private float laneDistance = 1.5F;
-    private float moveSpeed = 3;
+    public float moveSpeed = 3;
     private float sideSpeed = 7;
 
     public float getMoveSpeed(){
