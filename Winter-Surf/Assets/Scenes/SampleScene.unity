@@ -293,7 +293,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7323159844642725843, guid: 707116ee172e0c54ca60acac66a8b689, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7323159844642725843, guid: 707116ee172e0c54ca60acac66a8b689, type: 3}
       propertyPath: m_LocalPosition.x
@@ -452,7 +452,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7323159844642725843, guid: 707116ee172e0c54ca60acac66a8b689, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7323159844642725843, guid: 707116ee172e0c54ca60acac66a8b689, type: 3}
       propertyPath: m_LocalPosition.x
@@ -832,6 +832,8 @@ MonoBehaviour:
   increment: 10
   creatingSection: 0
   secNum: 0
+  pineObstacle: {fileID: 1000012936420096, guid: 8a09d4477f40ea343b29231d2f5bee64, type: 3}
+  snowflakeCollectable: {fileID: 1008144681}
 --- !u!1 &506817070
 GameObject:
   m_ObjectHideFlags: 0
@@ -1536,7 +1538,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 451560, guid: 5578b82f17c954843901e8b68ca21dcc, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 451560, guid: 5578b82f17c954843901e8b68ca21dcc, type: 3}
       propertyPath: m_LocalPosition.x
