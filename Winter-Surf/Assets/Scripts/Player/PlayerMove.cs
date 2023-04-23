@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] GameObject levelControl;
+    [SerializeField] SwipeControl swipeControl;
     [SerializeField] int lane = 0;
     private float laneDistance = 1.5F;
     public float moveSpeed = 3;
@@ -13,6 +13,9 @@ public class PlayerMove : MonoBehaviour
     // TODO: jeśli możliwe przenieść te deklaracje do GameController
     public static GameObject PLAYERINSTANCE;
     public static GameObject PLAYERCHILDINSTANCE;
+
+    private Vector2 startTouchPosition;
+    private Vector2 endTouchPosition;
 
     void Awake()
     {
@@ -29,11 +32,13 @@ public class PlayerMove : MonoBehaviour
     {
         transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed, Space.World);
 
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        SwipeControl.Direction swipeDirection = swipeControl.GetSwipe();
+
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow) || swipeDirection == SwipeControl.Direction.LEFT)
         {
             MoveLeft();
         }
-        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow) || swipeDirection == SwipeControl.Direction.RIGHT)
         {
             MoveRight();
         }
