@@ -22,7 +22,6 @@ public class SwipeControl : MonoBehaviour
         {
             endTouchPosition = Input.GetTouch(0).position;
             swipe = GetDominantSwipeDirection(startTouchPosition, endTouchPosition);
-            // swipes.Enqueue(GetDominantSwipeDirection(startTouchPosition, endTouchPosition));
         }
     }
 
