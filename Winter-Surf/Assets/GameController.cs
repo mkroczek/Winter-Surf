@@ -11,7 +11,8 @@ public class GameController : MonoBehaviour
     // public GameObject PLAYERCHILDINSTANCE;
 
     void Awake()
-    {
+    {   
+        // this is used to share the LevelControl object outside along with its components
         LEVELCONTROL = gameObject;
     }
 }

@@ -16,5 +16,7 @@ public class Collision : MonoBehaviour
         playerChild.GetComponent<Animator>().Play("Stumble Backwards");
         mainCamera.GetComponent<Animator>().enabled = true;
         levelControl.GetComponent<GameOverSequence>().enabled = true;
+        levelControl.GetComponent<GenerateLevel>().enabled = false;
+
     }
 }

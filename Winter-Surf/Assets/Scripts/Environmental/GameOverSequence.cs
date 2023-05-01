@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameOverSequence : MonoBehaviour
 {
     public GameObject endScreen;
+    public GameObject pointDisplay;
 
     void Start()
     {
@@ -14,5 +15,6 @@ public class GameOverSequence : MonoBehaviour
     IEnumerator EndSequence() {
         yield return new WaitForSeconds(3);
         endScreen.SetActive(true);
+        pointDisplay.SetActive(false);
     }
 }
