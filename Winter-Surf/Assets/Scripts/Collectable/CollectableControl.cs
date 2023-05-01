@@ -7,11 +7,14 @@ public class CollectableControl : MonoBehaviour
 {
     private static int coinCount;
     [SerializeField] GameObject coinCountDisplay;
+    // private static int coinEndCount;
+    [SerializeField] GameObject coinEndCountDisplay;
 
     // Update is called once per frame
     void Update()
     {
         coinCountDisplay.GetComponent<Text>().text = "" + coinCount;
+        coinEndCountDisplay.GetComponent<Text>().text = "" + coinCount;
     }
 
     public static void Increment()
