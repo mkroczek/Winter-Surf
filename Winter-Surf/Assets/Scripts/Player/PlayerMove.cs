@@ -14,8 +14,11 @@ public class PlayerMove : MonoBehaviour
     public static GameObject PLAYERINSTANCE;
     public static GameObject PLAYERCHILDINSTANCE;
 
-    private Vector2 startTouchPosition;
-    private Vector2 endTouchPosition;
+    // fields connected with jumping
+    [SerializeField] float jumpHeight = 5;
+    [SerializeField] float gravityScale = 5;
+    [SerializeField] Transform groundCheck;
+    private float velocity = 0;
 
     void Awake()
     {
@@ -33,6 +36,8 @@ public class PlayerMove : MonoBehaviour
         transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed, Space.World);
 
         SwipeControl.Direction swipeDirection = swipeControl.GetSwipe();
+
+        HandleJumping(swipeDirection);
 
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow) || swipeDirection == SwipeControl.Direction.LEFT)
         {
@@ -60,5 +65,34 @@ public class PlayerMove : MonoBehaviour
         {
             lane ++;
         }
+    }
+
+    private void HandleJumping(SwipeControl.Direction swipeDirection)
+    {
+        if (IsGrounded())
+        {
+            velocity = 0;
+            if (Input.GetKeyDown(KeyCode.W) || swipeDirection == SwipeControl.Direction.UP)
+            {
+                Jump();
+            }
+            PLAYERCHILDINSTANCE.GetComponent<Animator>().Play("Fast Run");
+        }
+        else
+        {
+            velocity += Physics.gravity.y * gravityScale * Time.deltaTime;
+        }
+        transform.Translate(Vector3.up * Time.deltaTime * velocity, Space.World);
+    }
+
+    private void Jump()
+    {
+        PLAYERCHILDINSTANCE.GetComponent<Animator>().Play("Jump");
+        velocity = Mathf.Sqrt(jumpHeight * -2 * (Physics.gravity.y * gravityScale));
+    }
+
+    private bool IsGrounded()
+    {
+        return groundCheck.position.y <= 0;
     }
 }
