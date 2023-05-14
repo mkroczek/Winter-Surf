@@ -12,10 +12,16 @@ public class GenerateLevel : MonoBehaviour
     public int secNum;
     public GameObject pineObstacle;
     public GameObject snowflakeCollectable;
+    private PlayerMove playerMove;
+    private float spawnSpeed;
 
     // Start is called before the first frame update
     void Start(){
         AssignWeights();
+
+        GameObject gameObject = new GameObject();
+        playerMove = gameObject.AddComponent<PlayerMove>();;
+        spawnSpeed = playerMove.moveSpeed;
     }
 
 
@@ -42,7 +48,7 @@ public class GenerateLevel : MonoBehaviour
         int randomIndex = Random.Range(0, weightedIndices.Count);
         GameObject obj = Instantiate(section[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
         zPos += increment;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(spawnSpeed);
         creatingSection = false;
 
          // obstacle placement
