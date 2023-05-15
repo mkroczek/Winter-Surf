@@ -19,5 +19,8 @@ public class GameOverSequence : MonoBehaviour
         coinCountDisplay.SetActive(false);
         yield return new WaitForSeconds(5);
         SceneManager.LoadScene(0);
+        // reset points count to zero
+        CollectableControl.Reset();
+
     }
 }

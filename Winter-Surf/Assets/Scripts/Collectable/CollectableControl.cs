@@ -21,4 +21,9 @@ public class CollectableControl : MonoBehaviour
     {
         coinCount ++;
     }
+
+    public static void Reset()
+    {
+        coinCount = 0;
+    }
 }
