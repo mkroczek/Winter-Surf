@@ -19,9 +19,8 @@ public class GenerateLevel : MonoBehaviour
     void Start(){
         AssignWeights();
 
-        GameObject gameObject = new GameObject();
-        playerMove = gameObject.AddComponent<PlayerMove>();;
-        spawnSpeed = playerMove.moveSpeed;
+        playerMove = playerMove = PlayerMove.PLAYERINSTANCE.GetComponent<PlayerMove>();
+        spawnSpeed = playerMove.getMoveSpeed();
     }
 
 
