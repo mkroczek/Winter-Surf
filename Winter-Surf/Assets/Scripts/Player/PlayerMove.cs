@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    private Vector3 startPosition;
+    public float distancePassed = 0;
     [SerializeField] SwipeControl swipeControl;
     [SerializeField] int lane = 0;
     private float laneDistance = 1.5F;
-    public float moveSpeed = 3;
+    public int sectionDistance = 0;
+    public float moveSpeed = 50;
     private float sideSpeed = 7;
 
     // TODO: jeśli możliwe przenieść te deklaracje do GameController
@@ -24,6 +27,7 @@ public class PlayerMove : MonoBehaviour
     {
         PLAYERINSTANCE = gameObject;
         PLAYERCHILDINSTANCE = transform.GetChild(1).gameObject;
+        startPosition = transform.position;
     }
 
     public float getMoveSpeed(){
@@ -33,6 +37,13 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        distancePassed = Vector3.Distance(startPosition, transform.position);
+
+        if(sectionDistance == 5){
+            Debug.Log("Increase speed!");
+            moveSpeed *= 2;
+        }
+
         transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed, Space.World);
 
         SwipeControl.Direction swipeDirection = swipeControl.GetSwipe();

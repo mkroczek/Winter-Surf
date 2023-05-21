@@ -10,23 +10,32 @@ public class GenerateLevel : MonoBehaviour
     public int increment = 10;
     public bool creatingSection = false;
     public int secNum;
+    public int levelSectionsNum = 5;
     public GameObject pineObstacle;
     public GameObject snowflakeCollectable;
     private PlayerMove playerMove;
     private float spawnSpeed;
+    private const float epsilon = 1;
 
     // Start is called before the first frame update
     void Start(){
         AssignWeights();
 
-        playerMove = playerMove = PlayerMove.PLAYERINSTANCE.GetComponent<PlayerMove>();
-        spawnSpeed = playerMove.getMoveSpeed();
+        playerMove = PlayerMove.PLAYERINSTANCE.GetComponent<PlayerMove>();
+        spawnSpeed = 2;
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        if(playerMove.distancePassed >= 10 * levelSectionsNum - epsilon && playerMove.distancePassed <= 10 * levelSectionsNum + epsilon) // Section length is 10
+        {
+            playerMove.moveSpeed *= 1.25f;
+            // spawnSpeed /= 1.5f;
+            levelSectionsNum *= 2;
+        }
+
         if(!creatingSection)
         {
             creatingSection = true;
@@ -45,6 +54,7 @@ public class GenerateLevel : MonoBehaviour
 
         // section placement
         int randomIndex = Random.Range(0, weightedIndices.Count);
+        secNum = weightedIndices[randomIndex];
         GameObject obj = Instantiate(section[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
         zPos += increment;
         yield return new WaitForSeconds(spawnSpeed);
