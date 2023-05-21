@@ -69,7 +69,15 @@ public class GenerateLevel : MonoBehaviour
         if(zPos - playerMove.position.z <= generationDistance){
             // section placement
             int randomIndex = Random.Range(0, weightedIndices.Count);
+            int prevSecNum = secNum;
             secNum = weightedIndices[randomIndex];
+            while (secNum == prevSecNum)
+            {
+                randomIndex = Random.Range(0, weightedIndices.Count);
+                secNum = weightedIndices[randomIndex];
+            }
+
+            
             GameObject obj = Instantiate(section[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
             sectionsToBeRemoved.Add(obj);
             zPos += increment;
