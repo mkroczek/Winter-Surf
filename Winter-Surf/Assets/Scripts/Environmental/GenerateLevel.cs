@@ -16,6 +16,10 @@ public class GenerateLevel : MonoBehaviour
     private PlayerMove playerMove;
     private float spawnSpeed;
     private const float epsilon = 1;
+    private List<GameObject> sectionsToBeRemoved = new List<GameObject>();
+    private List<GameObject> snowflakesToBeRemoved = new List<GameObject>();
+    private List<GameObject> pinesToBeRemoved = new List<GameObject>();
+
 
     // Start is called before the first frame update
     void Start(){
@@ -52,21 +56,41 @@ public class GenerateLevel : MonoBehaviour
             snowflakePosition = Random.Range(-1,2) * 1.5f;
         }
 
+        // Remove old section
+        if (sectionsToBeRemoved.Count > 0)
+        {
+            GameObject firstElement = sectionsToBeRemoved[0];
+            GameObject firstSnowflake = snowflakesToBeRemoved[0];
+            GameObject firstPine = pinesToBeRemoved[0];
+            if (playerMove.position.z >= firstElement.transform.position.z + 30)
+            {
+                sectionsToBeRemoved.RemoveAt(0);
+                snowflakesToBeRemoved.RemoveAt(0);
+                pinesToBeRemoved.RemoveAt(0);
+                Destroy(firstElement);
+                Destroy(firstSnowflake);
+                Destroy(firstPine);
+            }
+        }
+
         // section placement
         int randomIndex = Random.Range(0, weightedIndices.Count);
         secNum = weightedIndices[randomIndex];
         GameObject obj = Instantiate(section[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
+        sectionsToBeRemoved.Add(obj);
         zPos += increment;
         yield return new WaitForSeconds(spawnSpeed);
         creatingSection = false;
 
          // obstacle placement
         Vector3 obstacleVect = new Vector3(obj.transform.position.x + obstaclePosition, obj.transform.position.y, obj.transform.position.z);
-        Instantiate(pineObstacle, obstacleVect, Quaternion.identity);
+        GameObject pine = Instantiate(pineObstacle, obstacleVect, Quaternion.identity);
+        pinesToBeRemoved.Add(pine);
 
         // snowflake placement
         Vector3 snowflakeVect = new Vector3(obj.transform.position.x + snowflakePosition, obj.transform.position.y + 0.5f, obj.transform.position.z);
-        Instantiate(snowflakeCollectable, snowflakeVect, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
+        GameObject snowflake = Instantiate(snowflakeCollectable, snowflakeVect, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
+        snowflakesToBeRemoved.Add(snowflake);
     }
 
     void AssignWeights()

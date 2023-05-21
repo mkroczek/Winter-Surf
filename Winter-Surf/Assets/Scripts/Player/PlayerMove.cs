@@ -12,6 +12,7 @@ public class PlayerMove : MonoBehaviour
     public int sectionDistance = 0;
     public float moveSpeed = 50;
     private float sideSpeed = 7;
+    public Vector3 position;
 
     // TODO: jeśli możliwe przenieść te deklaracje do GameController
     public static GameObject PLAYERINSTANCE;
@@ -28,6 +29,7 @@ public class PlayerMove : MonoBehaviour
         PLAYERINSTANCE = gameObject;
         PLAYERCHILDINSTANCE = transform.GetChild(1).gameObject;
         startPosition = transform.position;
+        position = startPosition;
     }
 
     public float getMoveSpeed(){
@@ -38,7 +40,7 @@ public class PlayerMove : MonoBehaviour
     void Update()
     {
         distancePassed = Vector3.Distance(startPosition, transform.position);
-
+        position = transform.position;
         if(sectionDistance == 5){
             Debug.Log("Increase speed!");
             moveSpeed *= 2;
