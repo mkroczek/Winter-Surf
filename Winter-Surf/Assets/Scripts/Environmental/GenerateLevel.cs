@@ -8,14 +8,13 @@ public class GenerateLevel : MonoBehaviour
     private List<int> weightedIndices = new List<int>();
     public int zPos = 16;
     public int increment = 10;
-    public bool creatingSection = false;
     public int secNum;
     public int levelSectionsNum = 5;
     public GameObject pineObstacle;
     public GameObject snowflakeCollectable;
     private PlayerMove playerMove;
-    private float spawnSpeed;
     private const float epsilon = 1;
+    private const float generationDistance = 40;
     private List<GameObject> sectionsToBeRemoved = new List<GameObject>();
     private List<GameObject> snowflakesToBeRemoved = new List<GameObject>();
     private List<GameObject> pinesToBeRemoved = new List<GameObject>();
@@ -26,7 +25,6 @@ public class GenerateLevel : MonoBehaviour
         AssignWeights();
 
         playerMove = PlayerMove.PLAYERINSTANCE.GetComponent<PlayerMove>();
-        spawnSpeed = 2;
     }
 
 
@@ -36,18 +34,13 @@ public class GenerateLevel : MonoBehaviour
         if(playerMove.distancePassed >= 10 * levelSectionsNum - epsilon && playerMove.distancePassed <= 10 * levelSectionsNum + epsilon) // Section length is 10
         {
             playerMove.moveSpeed *= 1.25f;
-            // spawnSpeed /= 1.5f;
             levelSectionsNum *= 2;
         }
 
-        if(!creatingSection)
-        {
-            creatingSection = true;
-            StartCoroutine(GenerateSection());
-        }
+        GenerateSection();
     }
 
-    IEnumerator GenerateSection()
+    void GenerateSection()
     {
         float obstaclePosition = Random.Range(-1,2) * 1.5f;
         float snowflakePosition = Random.Range(-1,2) * 1.5f;
@@ -73,24 +66,24 @@ public class GenerateLevel : MonoBehaviour
             }
         }
 
-        // section placement
-        int randomIndex = Random.Range(0, weightedIndices.Count);
-        secNum = weightedIndices[randomIndex];
-        GameObject obj = Instantiate(section[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
-        sectionsToBeRemoved.Add(obj);
-        zPos += increment;
-        yield return new WaitForSeconds(spawnSpeed);
-        creatingSection = false;
+        if(zPos - playerMove.position.z <= generationDistance){
+            // section placement
+            int randomIndex = Random.Range(0, weightedIndices.Count);
+            secNum = weightedIndices[randomIndex];
+            GameObject obj = Instantiate(section[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
+            sectionsToBeRemoved.Add(obj);
+            zPos += increment;
 
-         // obstacle placement
-        Vector3 obstacleVect = new Vector3(obj.transform.position.x + obstaclePosition, obj.transform.position.y, obj.transform.position.z);
-        GameObject pine = Instantiate(pineObstacle, obstacleVect, Quaternion.identity);
-        pinesToBeRemoved.Add(pine);
+            // obstacle placement
+            Vector3 obstacleVect = new Vector3(obj.transform.position.x + obstaclePosition, obj.transform.position.y, obj.transform.position.z);
+            GameObject pine = Instantiate(pineObstacle, obstacleVect, Quaternion.identity);
+            pinesToBeRemoved.Add(pine);
 
-        // snowflake placement
-        Vector3 snowflakeVect = new Vector3(obj.transform.position.x + snowflakePosition, obj.transform.position.y + 0.5f, obj.transform.position.z);
-        GameObject snowflake = Instantiate(snowflakeCollectable, snowflakeVect, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
-        snowflakesToBeRemoved.Add(snowflake);
+            // snowflake placement
+            Vector3 snowflakeVect = new Vector3(obj.transform.position.x + snowflakePosition, obj.transform.position.y + 0.5f, obj.transform.position.z);
+            GameObject snowflake = Instantiate(snowflakeCollectable, snowflakeVect, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
+            snowflakesToBeRemoved.Add(snowflake);
+        }
     }
 
     void AssignWeights()
