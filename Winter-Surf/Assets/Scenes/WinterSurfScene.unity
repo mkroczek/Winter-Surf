@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -974,9 +974,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9ad52df14fd23841b4b73ef00b7b26e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distancePassed: 0
   swipeControl: {fileID: 348746563}
   lane: 0
-  moveSpeed: 3
+  sectionDistance: 0
+  moveSpeed: 4
   jumpHeight: 3
   gravityScale: 3
   groundCheck: {fileID: 181428732}
@@ -1191,6 +1193,7 @@ MonoBehaviour:
   increment: 10
   creatingSection: 0
   secNum: 0
+  levelSectionsNum: 5
   pineObstacle: {fileID: 1000012936420096, guid: 8a09d4477f40ea343b29231d2f5bee64, type: 3}
   snowflakeCollectable: {fileID: 1008144681}
 --- !u!114 &348746563
