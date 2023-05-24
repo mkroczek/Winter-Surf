@@ -15,10 +15,7 @@ public class GenerateLevel : MonoBehaviour
     private PlayerMove playerMove;
     private const float epsilon = 1;
     private const float generationDistance = 40;
-    private List<GameObject> sectionsToBeRemoved = new List<GameObject>();
-    private List<GameObject> snowflakesToBeRemoved = new List<GameObject>();
-    private List<GameObject> pinesToBeRemoved = new List<GameObject>();
-
+    private List<Section> sectionsToBeRemoved = new List<Section>();
 
     // Start is called before the first frame update
     void Start(){
@@ -37,61 +34,48 @@ public class GenerateLevel : MonoBehaviour
             levelSectionsNum *= 2;
         }
 
+        RemoveOldSection();
         GenerateSection();
+    }
+
+    private void RemoveOldSection()
+    {
+        if (sectionsToBeRemoved.Count > 0)
+        {
+            Section firstSection = sectionsToBeRemoved[0];
+            if (playerMove.position.z >= firstSection.GetSection().transform.position.z + 30)
+            {
+                sectionsToBeRemoved.RemoveAt(0);
+                firstSection.DestroyScene();
+            }
+        }
     }
 
     void GenerateSection()
     {
-        float obstaclePosition = Random.Range(-1,2) * 1.5f;
-        float snowflakePosition = Random.Range(-1,2) * 1.5f;
-        while ( snowflakePosition == obstaclePosition ) 
-        {
-            snowflakePosition = Random.Range(-1,2) * 1.5f;
-        }
-
-        // Remove old section
-        if (sectionsToBeRemoved.Count > 0)
-        {
-            GameObject firstElement = sectionsToBeRemoved[0];
-            GameObject firstSnowflake = snowflakesToBeRemoved[0];
-            GameObject firstPine = pinesToBeRemoved[0];
-            if (playerMove.position.z >= firstElement.transform.position.z + 30)
-            {
-                sectionsToBeRemoved.RemoveAt(0);
-                snowflakesToBeRemoved.RemoveAt(0);
-                pinesToBeRemoved.RemoveAt(0);
-                Destroy(firstElement);
-                Destroy(firstSnowflake);
-                Destroy(firstPine);
-            }
-        }
-
         if(zPos - playerMove.position.z <= generationDistance){
-            // section placement
-            int randomIndex = Random.Range(0, weightedIndices.Count);
-            int prevSecNum = secNum;
-            secNum = weightedIndices[randomIndex];
-            while (secNum == prevSecNum)
-            {
-                randomIndex = Random.Range(0, weightedIndices.Count);
-                secNum = weightedIndices[randomIndex];
-            }
-
+            int secNum = PickRandomSection();
             
-            GameObject obj = Instantiate(section[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
-            sectionsToBeRemoved.Add(obj);
+            GameObject sectionObject = Instantiate(section[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
+            SectionBuilder sectionBuilder = new SectionBuilder(sectionObject, 1.5f, pineObstacle, snowflakeCollectable);
+            sectionBuilder.WithPines(3).WithSnowflakes(3);
+            sectionsToBeRemoved.Add(sectionBuilder.Build());
+
             zPos += increment;
-
-            // obstacle placement
-            Vector3 obstacleVect = new Vector3(obj.transform.position.x + obstaclePosition, obj.transform.position.y, obj.transform.position.z);
-            GameObject pine = Instantiate(pineObstacle, obstacleVect, Quaternion.identity);
-            pinesToBeRemoved.Add(pine);
-
-            // snowflake placement
-            Vector3 snowflakeVect = new Vector3(obj.transform.position.x + snowflakePosition, obj.transform.position.y + 0.5f, obj.transform.position.z);
-            GameObject snowflake = Instantiate(snowflakeCollectable, snowflakeVect, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
-            snowflakesToBeRemoved.Add(snowflake);
         }
+    }
+
+    private int PickRandomSection()
+    {
+        int randomIndex = Random.Range(0, weightedIndices.Count);
+        int prevSecNum = secNum;
+        secNum = weightedIndices[randomIndex];
+        while (secNum == prevSecNum)
+        {
+            randomIndex = Random.Range(0, weightedIndices.Count);
+            secNum = weightedIndices[randomIndex];
+        }
+        return secNum;
     }
 
     void AssignWeights()
