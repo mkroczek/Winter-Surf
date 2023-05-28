@@ -10,6 +10,7 @@ public class Collision : MonoBehaviour
         GameObject playerChild = PlayerMove.PLAYERCHILDINSTANCE;
         GameObject mainCamera = Camera.main.gameObject;
 
+        Debug.Log("Collision with "+e+" at position"+e.transform.position+". Player's position is "+thePlayer.transform.position);
         this.gameObject.GetComponent<MeshCollider>().enabled = false;
         thePlayer.GetComponent<PlayerMove>().enabled = false;
         // Animator playerAnimator = playerChild.GetComponent<Animator>();

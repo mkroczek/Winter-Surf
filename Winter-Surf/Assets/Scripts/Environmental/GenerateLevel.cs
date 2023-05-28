@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GenerateLevel : MonoBehaviour
 {
-    public GameObject[] section;
+    public GameObject[] sections;
     private List<int> weightedIndices = new List<int>();
     public int zPos = 16;
     public int increment = 10;
@@ -12,13 +12,11 @@ public class GenerateLevel : MonoBehaviour
     public int levelSectionsNum = 5;
     public GameObject pineObstacle;
     public GameObject snowflakeCollectable;
+    [SerializeField] GameObject rockObstacle;
     private PlayerMove playerMove;
     private const float epsilon = 1;
     private const float generationDistance = 40;
-    private List<GameObject> sectionsToBeRemoved = new List<GameObject>();
-    private List<GameObject> snowflakesToBeRemoved = new List<GameObject>();
-    private List<GameObject> pinesToBeRemoved = new List<GameObject>();
-
+    private List<List<GameObject>> sectionsToBeRemoved = new List<List<GameObject>>();
 
     // Start is called before the first frame update
     void Start(){
@@ -37,61 +35,74 @@ public class GenerateLevel : MonoBehaviour
             levelSectionsNum *= 2;
         }
 
+        RemoveOldSection();
         GenerateSection();
+    }
+
+    private void RemoveOldSection()
+    {
+        if (sectionsToBeRemoved.Count > 0)
+        {
+            List<GameObject> firstSection = sectionsToBeRemoved[0];
+            if (playerMove.position.z >= firstSection[0].transform.position.z + 30)
+            {
+                sectionsToBeRemoved.RemoveAt(0);
+                firstSection.ForEach(obj => Destroy(obj));
+            }
+        }
     }
 
     void GenerateSection()
     {
-        float obstaclePosition = Random.Range(-1,2) * 1.5f;
-        float snowflakePosition = Random.Range(-1,2) * 1.5f;
-        while ( snowflakePosition == obstaclePosition ) 
-        {
-            snowflakePosition = Random.Range(-1,2) * 1.5f;
-        }
-
-        // Remove old section
-        if (sectionsToBeRemoved.Count > 0)
-        {
-            GameObject firstElement = sectionsToBeRemoved[0];
-            GameObject firstSnowflake = snowflakesToBeRemoved[0];
-            GameObject firstPine = pinesToBeRemoved[0];
-            if (playerMove.position.z >= firstElement.transform.position.z + 30)
-            {
-                sectionsToBeRemoved.RemoveAt(0);
-                snowflakesToBeRemoved.RemoveAt(0);
-                pinesToBeRemoved.RemoveAt(0);
-                Destroy(firstElement);
-                Destroy(firstSnowflake);
-                Destroy(firstPine);
-            }
-        }
-
         if(zPos - playerMove.position.z <= generationDistance){
-            // section placement
-            int randomIndex = Random.Range(0, weightedIndices.Count);
-            int prevSecNum = secNum;
-            secNum = weightedIndices[randomIndex];
-            while (secNum == prevSecNum)
-            {
-                randomIndex = Random.Range(0, weightedIndices.Count);
-                secNum = weightedIndices[randomIndex];
-            }
-
+            int secNum = PickRandomSection();
             
-            GameObject obj = Instantiate(section[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
-            sectionsToBeRemoved.Add(obj);
+            GameObject sectionObject = Instantiate(sections[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
+            SectionBuilder sectionBuilder = new SectionBuilder(sectionObject, 1f);
+            sectionBuilder.WithPines(3).WithRocks(3).WithSnowflakes(5);
+            Section section = sectionBuilder.Build();
+            sectionsToBeRemoved.Add(InstantiateSection(section));
+
             zPos += increment;
-
-            // obstacle placement
-            Vector3 obstacleVect = new Vector3(obj.transform.position.x + obstaclePosition, obj.transform.position.y, obj.transform.position.z);
-            GameObject pine = Instantiate(pineObstacle, obstacleVect, Quaternion.identity);
-            pinesToBeRemoved.Add(pine);
-
-            // snowflake placement
-            Vector3 snowflakeVect = new Vector3(obj.transform.position.x + snowflakePosition, obj.transform.position.y + 0.5f, obj.transform.position.z);
-            GameObject snowflake = Instantiate(snowflakeCollectable, snowflakeVect, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
-            snowflakesToBeRemoved.Add(snowflake);
         }
+    }
+
+    private List<GameObject> InstantiateSection(Section section)
+    {
+        List<GameObject> sectionObjects = new List<GameObject>();
+        sectionObjects.Add(section.GetSection());
+        section.GetPines().ForEach(pinePosition => sectionObjects.Add(InstantiatePine(pinePosition)));
+        section.GetRocks().ForEach(rockPosition => sectionObjects.Add(InstantiateRock(rockPosition)));
+        section.GetSnowflakes().ForEach(snowflakePosition => sectionObjects.Add(InstantiateSnowflake(snowflakePosition)));
+        return sectionObjects;
+    }
+
+    private GameObject InstantiatePine(Vector3 position)
+    {
+        return Instantiate(pineObstacle, position, Quaternion.identity);
+    }
+
+    private GameObject InstantiateRock(Vector3 position)
+    {
+        return Instantiate(rockObstacle, position, Quaternion.identity);
+    }
+
+    private GameObject InstantiateSnowflake(Vector3 position)
+    {
+        return Instantiate(snowflakeCollectable, position, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
+    }
+
+    private int PickRandomSection()
+    {
+        int randomIndex = Random.Range(0, weightedIndices.Count);
+        int prevSecNum = secNum;
+        secNum = weightedIndices[randomIndex];
+        while (secNum == prevSecNum)
+        {
+            randomIndex = Random.Range(0, weightedIndices.Count);
+            secNum = weightedIndices[randomIndex];
+        }
+        return secNum;
     }
 
     void AssignWeights()
@@ -100,7 +111,7 @@ public class GenerateLevel : MonoBehaviour
         weightedIndices.Clear();
 
         // Assign weights based on probabilities
-        for (int i = 0; i < section.Length; i++)
+        for (int i = 0; i < sections.Length; i++)
         {
             int weight;
 

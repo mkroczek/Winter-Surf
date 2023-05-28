@@ -8,7 +8,7 @@ public class PlayerMove : MonoBehaviour
     public float distancePassed = 0;
     [SerializeField] SwipeControl swipeControl;
     [SerializeField] int lane = 0;
-    private float laneDistance = 1.5F;
+    private float laneDistance = 1F;
     public int sectionDistance = 0;
     public float moveSpeed = 50;
     private float sideSpeed = 7;
@@ -19,7 +19,7 @@ public class PlayerMove : MonoBehaviour
     public static GameObject PLAYERCHILDINSTANCE;
 
     // fields connected with jumping
-    [SerializeField] float jumpHeight = 5;
+    [SerializeField] float jumpHeight = 3;
     [SerializeField] float gravityScale = 5;
     [SerializeField] Transform groundCheck;
     private float velocity = 0;
@@ -90,6 +90,8 @@ public class PlayerMove : MonoBehaviour
                 Jump();
             }
             PLAYERCHILDINSTANCE.GetComponent<Animator>().Play("Fast Run");
+            // set position player on the surface if fell underneath
+            transform.position = new Vector3(transform.position.x, 0.35f, transform.position.z);
         }
         else
         {
