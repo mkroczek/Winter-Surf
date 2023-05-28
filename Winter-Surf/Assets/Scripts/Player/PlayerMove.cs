@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    private Vector3 startPosition;
+    public float distancePassed = 0;
     [SerializeField] SwipeControl swipeControl;
     [SerializeField] int lane = 0;
-    private float laneDistance = 1.5F;
-    public float moveSpeed = 3;
+    private float laneDistance = 1F;
+    public int sectionDistance = 0;
+    public float moveSpeed = 50;
     private float sideSpeed = 7;
+    public Vector3 position;
 
     // TODO: jeśli możliwe przenieść te deklaracje do GameController
     public static GameObject PLAYERINSTANCE;
     public static GameObject PLAYERCHILDINSTANCE;
 
     // fields connected with jumping
-    [SerializeField] float jumpHeight = 5;
+    [SerializeField] float jumpHeight = 3;
     [SerializeField] float gravityScale = 5;
     [SerializeField] Transform groundCheck;
     private float velocity = 0;
@@ -24,6 +28,8 @@ public class PlayerMove : MonoBehaviour
     {
         PLAYERINSTANCE = gameObject;
         PLAYERCHILDINSTANCE = transform.GetChild(1).gameObject;
+        startPosition = transform.position;
+        position = startPosition;
     }
 
     public float getMoveSpeed(){
@@ -33,6 +39,13 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        distancePassed = Vector3.Distance(startPosition, transform.position);
+        position = transform.position;
+        if(sectionDistance == 5){
+            Debug.Log("Increase speed!");
+            moveSpeed *= 2;
+        }
+
         transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed, Space.World);
 
         SwipeControl.Direction swipeDirection = swipeControl.GetSwipe();
@@ -77,6 +90,8 @@ public class PlayerMove : MonoBehaviour
                 Jump();
             }
             PLAYERCHILDINSTANCE.GetComponent<Animator>().Play("Fast Run");
+            // set position player on the surface if fell underneath
+            transform.position = new Vector3(transform.position.x, 0.35f, transform.position.z);
         }
         else
         {
