@@ -12,6 +12,7 @@ public class GenerateLevel : MonoBehaviour
     public int levelSectionsNum = 5;
     public GameObject pineObstacle;
     public GameObject snowflakeCollectable;
+    [SerializeField] GameObject rockObstacle;
     private PlayerMove playerMove;
     private const float epsilon = 1;
     private const float generationDistance = 40;
@@ -58,7 +59,7 @@ public class GenerateLevel : MonoBehaviour
             
             GameObject sectionObject = Instantiate(sections[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
             SectionBuilder sectionBuilder = new SectionBuilder(sectionObject, 1f);
-            sectionBuilder.WithPines(5).WithSnowflakes(5);
+            sectionBuilder.WithPines(3).WithRocks(3).WithSnowflakes(5);
             Section section = sectionBuilder.Build();
             sectionsToBeRemoved.Add(InstantiateSection(section));
 
@@ -71,19 +72,23 @@ public class GenerateLevel : MonoBehaviour
         List<GameObject> sectionObjects = new List<GameObject>();
         sectionObjects.Add(section.GetSection());
         section.GetPines().ForEach(pinePosition => sectionObjects.Add(InstantiatePine(pinePosition)));
+        section.GetRocks().ForEach(rockPosition => sectionObjects.Add(InstantiateRock(rockPosition)));
         section.GetSnowflakes().ForEach(snowflakePosition => sectionObjects.Add(InstantiateSnowflake(snowflakePosition)));
         return sectionObjects;
     }
 
     private GameObject InstantiatePine(Vector3 position)
     {
-        // Debug.Log("Instantiate pine at position "+position);
         return Instantiate(pineObstacle, position, Quaternion.identity);
+    }
+
+    private GameObject InstantiateRock(Vector3 position)
+    {
+        return Instantiate(rockObstacle, position, Quaternion.identity);
     }
 
     private GameObject InstantiateSnowflake(Vector3 position)
     {
-        Debug.Log("Instantiate snowflake at position "+position);
         return Instantiate(snowflakeCollectable, position, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
     }
 

@@ -45,7 +45,9 @@ public class SectionBuilder
             snowflakesNumber
         );
         Section sectionObj = new Section(section);
-        GeneratePines(generator.GetObstaclesPositions(), sectionObj);
+        List<Vector3> obstaclesPositions = generator.GetObstaclesPositions();
+        GeneratePines(obstaclesPositions.GetRange(0, pinesNumber), sectionObj);
+        GenerateRocks(obstaclesPositions.GetRange(pinesNumber, rocksNumber), sectionObj);
         GenerateSnowflakes(generator.GetCollectablesPositions(), sectionObj);
         return sectionObj;
     }
@@ -58,11 +60,22 @@ public class SectionBuilder
         {
             Vector3 position = positions[i];
             Vector3 obstacleVect = new Vector3(sectionTransform.position.x + position.x * laneWidth, sectionTransform.position.y, sectionTransform.position.z + position.z - 5);
-            Debug.Log("Pine position before vect "+position);
-            Debug.Log("Pine position after vect "+obstacleVect);
             pines.Add(obstacleVect);
         }
         section.SetPines(pines);
+    }
+
+    private void GenerateRocks(List<Vector3> positions, Section section)
+    {
+        Transform sectionTransform = section.GetSection().transform;
+        List<Vector3> rocks = new List<Vector3>();
+        for (int i = 0; i < rocksNumber; i++)
+        {
+            Vector3 position = positions[i];
+            Vector3 obstacleVect = new Vector3(sectionTransform.position.x + position.x * laneWidth, sectionTransform.position.y, sectionTransform.position.z + position.z - 5);
+            rocks.Add(obstacleVect);
+        }
+        section.SetRocks(rocks);
     }
 
     private void GenerateSnowflakes(List<Vector3> positions, Section section)
