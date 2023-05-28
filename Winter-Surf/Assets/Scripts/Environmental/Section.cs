@@ -2,29 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Section : MonoBehaviour
+public class Section
 {
     private GameObject section;
-    private List<GameObject> pines = new List<GameObject>();
-    private List<GameObject> rocks = new List<GameObject>();
-    private List<GameObject> snowflakes = new List<GameObject>();
+    private List<Vector3> pines = new List<Vector3>();
+    private List<Vector3> rocks = new List<Vector3>();
+    private List<Vector3> snowflakes = new List<Vector3>();
 
     public Section(GameObject section)
     {
         this.section = section;
     }
 
-    public void SetPines(List<GameObject> pines)
+    public void SetPines(List<Vector3> pines)
     {
         this.pines = pines;
     }
 
-    public void SetRocks(List<GameObject> rocks)
+    public void SetRocks(List<Vector3> rocks)
     {
         this.rocks = rocks;
     }
 
-    public void SetSnowflakes(List<GameObject> snowflakes)
+    public void SetSnowflakes(List<Vector3> snowflakes)
     {
         this.snowflakes = snowflakes;
     }
@@ -34,11 +34,18 @@ public class Section : MonoBehaviour
         return section;
     }
 
-    public void DestroyScene()
+    public List<Vector3> GetPines()
     {
-        pines.ForEach(pine => Destroy(pine));
-        rocks.ForEach(rocks => Destroy(rocks));
-        snowflakes.ForEach(snowflakes => Destroy(snowflakes));
-        Destroy(section);
+        return pines;
+    }
+
+    public List<Vector3> GetRocks()
+    {
+        return rocks;
+    }
+
+    public List<Vector3> GetSnowflakes()
+    {
+        return snowflakes;
     }
 }

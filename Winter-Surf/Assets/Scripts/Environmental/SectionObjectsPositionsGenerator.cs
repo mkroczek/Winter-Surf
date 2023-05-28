@@ -37,7 +37,7 @@ public class SectionObjectsPositionsGenerator
         runningPath.Add(new Vector3(firstLane, 0, 0));
         for (int i = 1; i < sectionRows; i++)
         {
-            int previousLane = (int)runningPath[runningPath.Count - 1].z;
+            int previousLane = (int)runningPath[runningPath.Count - 1].x;
             int nextLane = GetNeighbourLane(previousLane);
             runningPath.Add(new Vector3(previousLane, 0, i));
             if (previousLane != nextLane)
@@ -50,7 +50,7 @@ public class SectionObjectsPositionsGenerator
     private int GetNeighbourLane(int lane)
     {
         int minLane = Math.Max(leftBoundLane, lane - 1);
-        int maxLane = Math.Max(rightBoundLane, lane + 1);
+        int maxLane = Math.Min(rightBoundLane, lane + 1);
         return Random.Range(minLane, maxLane + 1);
     }
 
@@ -58,14 +58,14 @@ public class SectionObjectsPositionsGenerator
     {
         for (int i = 0; i < obstacles; i++)
         {
-            int row = Random.Range(0, sectionRows + 1);
-            int lane = Random.Range(0, sectionLanes + 1);
-            Vector3 position = new Vector3(lane, 0, row);
-            while(IsOnRunningPath(position))
+            int row = Random.Range(0, sectionRows);
+            int lane = Random.Range(0, sectionLanes);
+            Vector3 position = new Vector3(lane-1, 0, row);
+            while(IsOnRunningPath(position) || obstaclesPositions.Contains(position))
             {
-                row = Random.Range(0, sectionRows + 1);
-                lane = Random.Range(0, sectionLanes + 1);
-                position = new Vector3(lane, 0, row);
+                row = Random.Range(0, sectionRows);
+                lane = Random.Range(0, sectionLanes);
+                position = new Vector3(lane-1, 0, row);
             }
             obstaclesPositions.Add(position);
         }
@@ -75,10 +75,10 @@ public class SectionObjectsPositionsGenerator
     {
         for (int i = 0; i < collectables; i++)
         {
-            Vector3 randomPositionOnPath = runningPath[Random.Range(0, runningPath.Count + 1)];
+            Vector3 randomPositionOnPath = runningPath[Random.Range(0, runningPath.Count)];
             while(IsOccupiedByObstacleOrCollectable(randomPositionOnPath))
             {
-                randomPositionOnPath = runningPath[Random.Range(0, runningPath.Count + 1)];
+                randomPositionOnPath = runningPath[Random.Range(0, runningPath.Count)];
             }
             collectablesPositions.Add(randomPositionOnPath);
         }

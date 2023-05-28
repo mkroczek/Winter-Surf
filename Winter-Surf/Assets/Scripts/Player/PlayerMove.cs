@@ -8,7 +8,7 @@ public class PlayerMove : MonoBehaviour
     public float distancePassed = 0;
     [SerializeField] SwipeControl swipeControl;
     [SerializeField] int lane = 0;
-    private float laneDistance = 1.5F;
+    private float laneDistance = 1F;
     public int sectionDistance = 0;
     public float moveSpeed = 50;
     private float sideSpeed = 7;

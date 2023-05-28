@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SectionBuilder : MonoBehaviour
+public class SectionBuilder
 {
     private GameObject section;
     private int sectionLength;
@@ -10,17 +10,12 @@ public class SectionBuilder : MonoBehaviour
     private int pinesNumber;
     private int rocksNumber;
     private int snowflakesNumber;
-    private GameObject pineObstacle;
-    private GameObject snowflakeCollectable;
 
-    public SectionBuilder (GameObject section, float laneWidth, GameObject pineObstacle, GameObject snowflakeCollectable)
+    public SectionBuilder (GameObject section, float laneWidth)
     {
         this.section = section;
         this.laneWidth = laneWidth;
-        this.pineObstacle = pineObstacle;
-        this.snowflakeCollectable = snowflakeCollectable;
-        Renderer renderer = section.GetComponent<Renderer>();
-        sectionLength = (int)renderer.bounds.size.z;
+        sectionLength = 10;
     }
 
     public SectionBuilder WithPines(int pinesNumber)
@@ -58,13 +53,14 @@ public class SectionBuilder : MonoBehaviour
     private void GeneratePines(List<Vector3> positions, Section section)
     {
         Transform sectionTransform = section.GetSection().transform;
-        List<GameObject> pines = new List<GameObject>();
+        List<Vector3> pines = new List<Vector3>();
         for (int i = 0; i < pinesNumber; i++)
         {
             Vector3 position = positions[i];
-            Vector3 obstacleVect = new Vector3(sectionTransform.position.x + position.x * laneWidth, sectionTransform.position.y, sectionTransform.position.z + position.z);
-            GameObject pine = Instantiate(pineObstacle, obstacleVect, Quaternion.identity);
-            pines.Add(pine);
+            Vector3 obstacleVect = new Vector3(sectionTransform.position.x + position.x * laneWidth, sectionTransform.position.y, sectionTransform.position.z + position.z - 5);
+            Debug.Log("Pine position before vect "+position);
+            Debug.Log("Pine position after vect "+obstacleVect);
+            pines.Add(obstacleVect);
         }
         section.SetPines(pines);
     }
@@ -72,13 +68,12 @@ public class SectionBuilder : MonoBehaviour
     private void GenerateSnowflakes(List<Vector3> positions, Section section)
     {
         Transform sectionTransform = section.GetSection().transform;
-        List<GameObject> snowflakes = new List<GameObject>();
-        for (int i = 0; i < rocksNumber; i++)
+        List<Vector3> snowflakes = new List<Vector3>();
+        for (int i = 0; i < snowflakesNumber; i++)
         {
             Vector3 position = positions[i];
-            Vector3 snowflakeVect = new Vector3(sectionTransform.position.x + position.x * laneWidth, sectionTransform.position.y + 0.5f, sectionTransform.position.z + position.z);
-            GameObject snowflake = Instantiate(snowflakeCollectable, snowflakeVect, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
-            snowflakes.Add(snowflake);
+            Vector3 snowflakeVect = new Vector3(sectionTransform.position.x + position.x * laneWidth, sectionTransform.position.y + 0.5f, sectionTransform.position.z + position.z - 5);
+            snowflakes.Add(snowflakeVect);
         }
         section.SetSnowflakes(snowflakes);
     }

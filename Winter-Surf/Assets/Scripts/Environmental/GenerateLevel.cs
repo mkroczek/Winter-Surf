@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GenerateLevel : MonoBehaviour
 {
-    public GameObject[] section;
+    public GameObject[] sections;
     private List<int> weightedIndices = new List<int>();
     public int zPos = 16;
     public int increment = 10;
@@ -15,7 +15,7 @@ public class GenerateLevel : MonoBehaviour
     private PlayerMove playerMove;
     private const float epsilon = 1;
     private const float generationDistance = 40;
-    private List<Section> sectionsToBeRemoved = new List<Section>();
+    private List<List<GameObject>> sectionsToBeRemoved = new List<List<GameObject>>();
 
     // Start is called before the first frame update
     void Start(){
@@ -42,11 +42,11 @@ public class GenerateLevel : MonoBehaviour
     {
         if (sectionsToBeRemoved.Count > 0)
         {
-            Section firstSection = sectionsToBeRemoved[0];
-            if (playerMove.position.z >= firstSection.GetSection().transform.position.z + 30)
+            List<GameObject> firstSection = sectionsToBeRemoved[0];
+            if (playerMove.position.z >= firstSection[0].transform.position.z + 30)
             {
                 sectionsToBeRemoved.RemoveAt(0);
-                firstSection.DestroyScene();
+                firstSection.ForEach(obj => Destroy(obj));
             }
         }
     }
@@ -56,13 +56,35 @@ public class GenerateLevel : MonoBehaviour
         if(zPos - playerMove.position.z <= generationDistance){
             int secNum = PickRandomSection();
             
-            GameObject sectionObject = Instantiate(section[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
-            SectionBuilder sectionBuilder = new SectionBuilder(sectionObject, 1.5f, pineObstacle, snowflakeCollectable);
-            sectionBuilder.WithPines(3).WithSnowflakes(3);
-            sectionsToBeRemoved.Add(sectionBuilder.Build());
+            GameObject sectionObject = Instantiate(sections[secNum], new Vector3(0, 0, zPos), Quaternion.identity);
+            SectionBuilder sectionBuilder = new SectionBuilder(sectionObject, 1f);
+            sectionBuilder.WithPines(5).WithSnowflakes(5);
+            Section section = sectionBuilder.Build();
+            sectionsToBeRemoved.Add(InstantiateSection(section));
 
             zPos += increment;
         }
+    }
+
+    private List<GameObject> InstantiateSection(Section section)
+    {
+        List<GameObject> sectionObjects = new List<GameObject>();
+        sectionObjects.Add(section.GetSection());
+        section.GetPines().ForEach(pinePosition => sectionObjects.Add(InstantiatePine(pinePosition)));
+        section.GetSnowflakes().ForEach(snowflakePosition => sectionObjects.Add(InstantiateSnowflake(snowflakePosition)));
+        return sectionObjects;
+    }
+
+    private GameObject InstantiatePine(Vector3 position)
+    {
+        // Debug.Log("Instantiate pine at position "+position);
+        return Instantiate(pineObstacle, position, Quaternion.identity);
+    }
+
+    private GameObject InstantiateSnowflake(Vector3 position)
+    {
+        Debug.Log("Instantiate snowflake at position "+position);
+        return Instantiate(snowflakeCollectable, position, transform.rotation * Quaternion.Euler (90f, 0f, 0f));
     }
 
     private int PickRandomSection()
@@ -84,7 +106,7 @@ public class GenerateLevel : MonoBehaviour
         weightedIndices.Clear();
 
         // Assign weights based on probabilities
-        for (int i = 0; i < section.Length; i++)
+        for (int i = 0; i < sections.Length; i++)
         {
             int weight;
 
