@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour
         LEVELCONTROL = gameObject;
     }
 
-        public void RestartGame()
+    public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
